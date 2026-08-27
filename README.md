@@ -25,6 +25,12 @@ The project uses a public API to generate live insights and allows users to save
 - LocalStorage
 - REST API
 
+## Data Source
+
+This project uses the Advice Slip JSON API to retrieve random advice content.
+
+API documentation: https://api.adviceslip.com/
+
 ## Project Structure
 
 ai-technology-dashboard/
