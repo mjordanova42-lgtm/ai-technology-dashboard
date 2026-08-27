@@ -52,7 +52,12 @@ function saveInsight() {
     const saved =
         JSON.parse(localStorage.getItem("savedInsights")) || [];
 
-    saved.push(insight);
+    const newInsight = {
+        text: insight,
+        savedAt: new Date().toLocaleString()
+    };
+
+    saved.push(newInsight);
 
     localStorage.setItem(
         "savedInsights",
@@ -85,7 +90,10 @@ function displaySavedInsights() {
             <div class="saved-item">
                 <span>${String(index + 1).padStart(2, "0")}</span>
 
-                <p>${insight}</p>
+                <div class="saved-content">
+                    <p>${insight.text}</p>
+                    <small>Saved ${insight.savedAt}</small>
+                </div>
 
                 <button
                     class="delete-button"
