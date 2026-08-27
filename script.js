@@ -3,6 +3,7 @@ const insightButton = document.getElementById("insight-button");
 const errorMessage = document.getElementById("error-message");
 const saveButton = document.getElementById("save-button");
 const savedInsights = document.getElementById("saved-insights");
+const streakCount = document.getElementById("streak-count");
 
 
 async function fetchInsight() {
@@ -20,6 +21,8 @@ async function fetchInsight() {
         const data = await response.json();
 
         displayInsight(data.slip.advice);
+
+        updateStreak();
 
     } catch (error) {
         showError();
@@ -121,8 +124,58 @@ function deleteInsight(index) {
 }
 
 
+function updateStreak() {
+    const today = new Date().toDateString();
+
+    const lastGenerated =
+        localStorage.getItem("lastGeneratedDate");
+
+    let streak =
+        Number(localStorage.getItem("insightStreak")) || 0;
+
+    if (lastGenerated === today) {
+        streakCount.textContent = streak;
+        return;
+    }
+
+    if (lastGenerated) {
+        const lastDate = new Date(lastGenerated);
+        const currentDate = new Date();
+
+        const difference =
+            Math.floor(
+                (currentDate - lastDate) /
+                (1000 * 60 * 60 * 24)
+            );
+
+        if (difference === 1) {
+            streak += 1;
+        } else {
+            streak = 1;
+        }
+    } else {
+        streak = 1;
+    }
+
+    localStorage.setItem("insightStreak", streak);
+    localStorage.setItem("lastGeneratedDate", today);
+
+    streakCount.textContent = streak;
+}
+
+
+function loadStreak() {
+    const streak =
+        Number(localStorage.getItem("insightStreak")) || 0;
+
+    streakCount.textContent = streak;
+}
+
+
 insightButton.addEventListener("click", fetchInsight);
 
 saveButton.addEventListener("click", saveInsight);
 
 displaySavedInsights();
+
+loadStreak();
